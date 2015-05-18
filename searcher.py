@@ -1,3 +1,4 @@
+import re
 from pymongo import MongoClient
 import loader
 
@@ -14,6 +15,7 @@ if (db.results.count() == 0):
 while True:
     var = raw_input("\nEnter query text: ")
     query = ".*" +  var + ".*"
-    results = db.results.find({ "text": { "$regex": query }})
+    regex = re.compile(".*" + re.escape(var) + ".*")
+    results = db.results.find({ "text": { "$regex": regex }})
     for i in results:
       print str(i["date"]) + ", " + i["text"]
